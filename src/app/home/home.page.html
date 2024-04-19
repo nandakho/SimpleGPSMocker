@@ -1,0 +1,17 @@
+<ion-content [fullscreen]="true" [scrollY]="false" [scrollX]="false">
+  <div class="leaflet" leaflet
+    [leafletOptions]="leafletOptions"
+    (leafletMapReady)="onMapReady($event)">
+  </div>
+  <ion-card (click)="resetZoom()" class="coord-info">
+    <ion-card-header>
+      <ion-card-title>Position:</ion-card-title>  
+    </ion-card-header>
+    <ion-card-content>
+      Latitude: {{latitude}}<br>
+      Longitude: {{longitude}}<br>
+      <ion-label>*Click here to reset view</ion-label>
+    </ion-card-content>
+  </ion-card>
+  <ion-label (click)="loadLocations()" class="import-btn"><ion-icon name="folder-open"></ion-icon>Import Locations</ion-label>
+</ion-content>

@@ -1,0 +1,70 @@
+ion-header {
+  ion-item {
+    --background: transparent;
+  }
+}
+
+.leaflet {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 0;
+}
+
+ion-card.coord-info {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  ion-card-header {
+    padding: 10px 10px 2px 10px;
+    ion-card-title {
+      font-weight: bold;
+      font-size: large;
+      color: var(--ion-color-light-shade);
+    }
+  }
+  ion-card-content {
+    padding: 2px 10px 10px 10px;
+    color: var(--ion-color-light-shade);
+    font-weight: bold;
+    font-size: small;
+    ion-label {
+      font-size: smaller;
+    }
+  }
+}
+
+ion-card.coord-info:hover {
+  border: 2px solid var(--ion-color-warning);
+  ion-card-header {
+    ion-card-title {
+      color: var(--ion-color-warning);
+    }
+  }
+  ion-card-content {
+    color: var(--ion-color-warning);
+  }
+}
+
+ion-label.import-btn {
+  cursor: pointer;
+  position: absolute;
+  margin: 10px;
+  padding: 10px;
+  background: var(--ion-color-dark);
+  color: var(--ion-color-light-shade);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  display: flex;
+  ion-icon {
+    padding-right: 5px;
+  }
+}
+ion-label.import-btn:hover {
+  border: 2px solid var(--ion-color-warning);
+  color: var(--ion-color-warning);
+}

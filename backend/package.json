@@ -1,0 +1,14 @@
+{
+    "name": "backend",
+    "version": "0.0.1",
+    "author": "ananda",
+    "homepage": "http://git.esswf.me:3000//",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "description": "Backend for gpsMocker to access adb from shell",
+    "dependencies": {
+        "express": "^4.19.2"
+    },
+    "type": "module"
+}

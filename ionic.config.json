@@ -1,0 +1,12 @@
+{
+  "name": "SimpleGPSMocker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}
