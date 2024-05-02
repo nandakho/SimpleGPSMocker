@@ -14,4 +14,23 @@
     </ion-card-content>
   </ion-card>
   <ion-label (click)="loadLocations()" class="import-btn"><ion-icon name="folder-open"></ion-icon>Import Locations</ion-label>
+  <ion-icon name="settings-outline" class="setting-btn" [ngClass]="showSettings?'hidden':'shown'" (click)="toggleSettings()"></ion-icon>
+  <ion-card class="settings" [ngClass]="showSettings?'shown':'hidden'">
+    <ion-card-content>
+      <ion-label class="settings-section-label">Settings:</ion-label>
+      <ion-input label="Appium ID" [(ngModel)]="tempSettings.appiumId" label-placement="floating"></ion-input>
+      <ion-input label="Offset Per Keypress" [(ngModel)]="tempSettings.offsetKeypress" type="number" label-placement="floating"></ion-input>
+      <ion-input label="ADB Interval (ms)" [(ngModel)]="tempSettings.adbInterval" type="number" label-placement="floating"></ion-input>
+      <ion-input label="API Url" [(ngModel)]="tempSettings.apiUrl" label-placement="floating"></ion-input>
+      <br>
+      <ion-label class="settings-section-label">Default Location:</ion-label>
+      <ion-input label="Latitude" [(ngModel)]="tempSettings.defaultLoc.lat" type="number" label-placement="floating"></ion-input>
+      <ion-input label="Longitude" [(ngModel)]="tempSettings.defaultLoc.lng" type="number" label-placement="floating"></ion-input>
+      <ion-input label="Altitude" [(ngModel)]="tempSettings.defaultLoc.alt" type="number" label-placement="floating"></ion-input>
+      <div class="buttons">
+        <ion-button color="danger" (click)="showSettings=false"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</ion-button>
+        <ion-button color="warning" (click)="saveSettings()"><ion-icon name="save-outline"></ion-icon>&nbsp;Save</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -5,7 +5,7 @@
 An app to control Android's GPS coordinate using Developer's Mock GPS from ADB with the help of [Appium](https://github.com/appium/io.appium.settings)
 ## How It Works
 - Frontend displays map with Leaflet's library  
-*Note: Any Frontend's Setting can be changed from `settings` variable found in `./src/app/home/home.page.ts`*
+*Note: Settings can now be changed from frontend directly (upper right menu)*
 - Backend served by default on `localhost` port `8888`
 - Frontend sends command to backend via POST Request to `localhost:8888`
 - Backend then calls ADB Server with command to change coordinate

@@ -19,6 +19,7 @@ ion-card.coord-info {
   background: var(--ion-color-dark);
   border: 2px solid var(--ion-color-light-shade);
   border-radius: 10px;
+  transition: all .3s ease;
   ion-card-header {
     padding: 10px 10px 2px 10px;
     ion-card-title {
@@ -60,6 +61,7 @@ ion-label.import-btn {
   border: 2px solid var(--ion-color-light-shade);
   border-radius: 10px;
   display: flex;
+  transition: all .3s ease;
   ion-icon {
     padding-right: 5px;
   }
@@ -67,4 +69,79 @@ ion-label.import-btn {
 ion-label.import-btn:hover {
   border: 2px solid var(--ion-color-warning);
   color: var(--ion-color-warning);
+}
+
+.setting-btn {
+  margin: 10px;
+  padding: 6px;
+  color: var(--ion-color-light-shade);
+  font-size: xx-large;
+  background: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+.setting-btn:hover {
+  border: 2px solid var(--ion-color-warning);
+  color: var(--ion-color-warning);
+}
+.setting-btn.shown {
+  width: 32px;
+  height: 32px;
+}
+.setting-btn.hidden {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+.settings {
+  margin: 10px;
+  padding: 8px;
+  color: var(--ion-color-light-shade);
+  background: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  transition: all .3s ease;
+  overflow-y: scroll;
+  ion-input {
+    background: var(--ion-color-dark-tint);
+    --padding-start: 6px;
+    --padding-end: 6px;
+    --highlight-color: var(--ion-color-warning);
+    margin-bottom: 4px;
+  }
+  ion-card-content {
+    padding: 8px;
+    padding-top: 4px;
+  }
+  .settings-section-label {
+    font-weight: bold;
+    font-size: medium;
+    color: var(--ion-color-warning);
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ion-button {
+      text-transform: none;
+    }
+  }
+}
+.settings.shown {
+  width: 300px;
+  height: 300px;
+}
+.settings.hidden {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
 }

@@ -5,7 +5,7 @@
 Sebuah apps untuk mengedalikan koordinat GPS Android menggunakan Developer Mock GPS via ADB dengan bantuan [Appium](https://github.com/appium/io.appium.settings)
 ## Cara Kerja
 - Frontend menampilkan peta dengan library Leaflet  
-*Catatan: Pengaturan frontend dapat diubah langsung di `./src/app/home/home.page.ts` bagian variabel `settings`*
+*Catatan: Sekarang pengaturan dapat diubah langsung dari frontend (menu di bagian kanan atas)*
 - Backend dijalankan, secara default di `localhost` port `8888`
 - Frontend mengirim command ke backend via POST Request ke `localhost:8888`
 - Backend menghubungi ADB Server berisi command untuk set koordinat baru

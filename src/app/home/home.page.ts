@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Icon, Map, TileLayer, LayerGroup, marker, LatLngLiteral, MarkerOptions } from 'leaflet';
 import { CapacitorHttp } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomePage {
     lng: 0,
     alt: 0
   };
-  public settings = {
+  private settings = {
     appiumId: `io.appium.settings`, //APPID dari Appium, kalau build pakai custom APPID silahkan diganti
     offsetKeypress: 0.00001, //Seberapa jauh offset saat jalan-jalan pakai keyboard (WASD)
     adbInterval: 2000, //Interval dalam ms. Kalau ADB command terpanggil sebelum interval selesai, maka command akan dihiraukan
@@ -25,6 +26,8 @@ export class HomePage {
       alt: 0
     }
   };
+  public tempSettings = this.settings;
+  public showSettings: boolean = false;
   public leafletOptions = {
     zoom: 17,
     maxZoom: 25,
@@ -44,8 +47,23 @@ export class HomePage {
 
   constructor(
     private ref: ChangeDetectorRef,
-  ) {
+  ) { }
+
+  async checkSaved(){
+    const s = (await Preferences.get({key:"settings"})).value;
+    if(s!=null) this.settings = JSON.parse(s);
     this.currentLocation = this.defLoc();
+  }
+
+  toggleSettings(){
+    this.tempSettings = JSON.parse(JSON.stringify(this.settings));
+    this.showSettings = true;
+  }
+  async saveSettings(){
+    const newSettings = JSON.stringify(this.tempSettings);
+    await Preferences.set({key:"settings",value:newSettings});
+    this.settings = JSON.parse(newSettings);
+    this.showSettings = false;
   }
 
   defLoc():LatLngLiteral{
@@ -166,6 +184,7 @@ export class HomePage {
   }
 
   public async onMapReady(lMap: Map) {
+    await this.checkSaved();
     //Init
     this.map = lMap;
     for(let layers of Object.keys(this.layerGroups)) {
@@ -173,6 +192,7 @@ export class HomePage {
     }
     setTimeout(() => lMap.invalidateSize(true), 500);
     this.setPosition({lat:this.latitude,lng:this.longitude});
+    this.resetZoom();
     //Listener
     this.map.on('click',e=>{
       this.setPosition({lat:e.latlng.lat,lng:e.latlng.lng});
