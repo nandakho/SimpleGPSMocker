@@ -10,8 +10,8 @@ Sebuah apps untuk mengedalikan koordinat GPS Android menggunakan Developer Mock 
 - Backend menghubungi ADB Server berisi command untuk set koordinat baru
 ## Penjelasan Pengaturan
 > [!NOTE]
-> Sekarang pengaturan dapat diubah langsung dari frontend (menu di bagian kanan atas)
-> Semua pengaturan kini disimpan di browser,
+> Sekarang pengaturan dapat diubah langsung dari frontend (menu di bagian kanan atas)  
+> Semua pengaturan kini disimpan di browser,  
 > perubahan pengaturan akan otomatis dimuat selama menggunakan browser yang sama
 ### appiumId:
 Default: `'io.appium.settings'`  

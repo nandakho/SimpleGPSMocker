@@ -10,8 +10,8 @@ An app to control Android's GPS coordinate using Developer's Mock GPS from ADB w
 - Backend then calls ADB Server with command to change coordinate
 ## App Setting
 > [!NOTE]
-> Settings can now be changed from frontend directly (upper right menu)
-> Any setting you changed is now saved in your browser,
+> Settings can now be changed from frontend directly (upper right menu)  
+> Any setting you changed is now saved in your browser,  
 > if you use the same browser all previous setting modified will carry over
 ### appiumId:
 Default: `'io.appium.settings'`  
