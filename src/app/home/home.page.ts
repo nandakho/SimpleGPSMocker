@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { Icon, Map, TileLayer, LayerGroup, marker, LatLngLiteral, MarkerOptions } from 'leaflet';
+import { Icon, Map, TileLayer, LayerGroup, marker, LatLngLiteral, MarkerOptions, LatLng } from 'leaflet';
 import { CapacitorHttp } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 
@@ -15,18 +15,29 @@ export class HomePage {
     lng: 0,
     alt: 0
   };
-  private settings = {
+  private isWalking: boolean = false;
+  private walkToLoc: LatLngLiteral = {
+    lat: 0,
+    lng: 0,
+    alt: 0
+  };
+  private settings:appSettings = {
     appiumId: `io.appium.settings`, //APPID dari Appium, kalau build pakai custom APPID silahkan diganti
     offsetKeypress: 0.00001, //Seberapa jauh offset saat jalan-jalan pakai keyboard (WASD)
+    offsetRandomize: false, //Random offset di atas offset wkwk (biar gak keliatan kaku koordinatnya)
     adbInterval: 2000, //Interval dalam ms. Kalau ADB command terpanggil sebelum interval selesai, maka command akan dihiraukan
     apiUrl: `http://localhost:8888/adb`, //API untuk ADB server, karena implementasi adb langsung dari Node sulit jadi kita pake php saja
     defaultLoc: { //Default location
       lat: -6.1753624,
       lng: 106.8271328,
       alt: 0
-    }
+    },
+    clickMovement: "direct", //direct = klik teleport, walk = klik jalan ke sana
+    moveInterval: 100, //dalam ms - hanya berlaku kalau clickMovement diset ke 'walk'
+    moveOffset: 0.00001, //Sama kaya offsetKeypress
+    moveOffsetRandomize: false, //Sama kaya offsetRandomize
   };
-  public tempSettings = this.settings;
+  public tempSettings:appSettings = JSON.parse(JSON.stringify(this.settings));
   public showSettings: boolean = false;
   public leafletOptions = {
     zoom: 17,
@@ -74,6 +85,42 @@ export class HomePage {
     this.curLoc = pos;
     this.placeMarker(pos, `worker`);
     this.callAdb({types:"start"});
+  }
+
+  setWalkPos(posTarget:LatLngLiteral){
+    this.walkToLoc = posTarget;
+    if(this.isWalking==false) this.walkToPosition();
+  }
+
+  walkToPosition(){
+    this.isWalking = true;
+    let fin = false;
+    let target = {
+      lat: (this.walkToLoc.lat - this.curLoc.lat),
+      lng: (this.walkToLoc.lng - this.curLoc.lng),
+      alt: ((this.walkToLoc.alt??0) - (this.curLoc.alt??0))
+    };
+    let ow = this.offsetWalk;
+    let move = {
+      lat: Math.abs(target.lat)>=ow?(target.lat>0?ow:(-ow)):target.lat,
+      lng: Math.abs(target.lng)>=ow?(target.lng>0?ow:(-ow)):target.lng,
+      alt: Math.abs(target.alt)>=ow?(target.alt>0?ow:(-ow)):target.alt
+    };
+    if(move.lat==target.lat && move.lng==target.lng && move.alt==target.alt) fin=true;
+    setTimeout(() => {
+      this.curLoc = {
+        lat: this.curLoc.lat + move.lat,
+        lng: this.curLoc.lng + move.lng,
+        alt: (this.curLoc.alt??0) + move.alt
+      };
+      this.placeMarker(this.curLoc, `worker`);
+      this.callAdb({types:"start"});
+      if(fin!=true){
+        this.walkToPosition();
+      } else {
+        this.isWalking = false;
+      }
+    }, this.settings.moveInterval);
   }
 
   resetZoom(){
@@ -195,21 +242,22 @@ export class HomePage {
     this.resetZoom();
     //Listener
     this.map.on('click',e=>{
-      this.setPosition({lat:e.latlng.lat,lng:e.latlng.lng});
+      if(this.settings.clickMovement=="direct") this.setPosition({lat:e.latlng.lat,lng:e.latlng.lng});
+      if(this.settings.clickMovement=="walk") this.setWalkPos({lat:e.latlng.lat,lng:e.latlng.lng});
     });
     this.map.on("keydown",e=>{
       switch(e.originalEvent.key.toLowerCase()){
         case "w":
-          this.setPosition({lat:(this.latitude+this.settings.offsetKeypress),lng:(this.longitude)});
+          this.setPosition({lat:(this.latitude+this.offsetKey),lng:(this.longitude)});
           break;
         case "s":
-          this.setPosition({lat:(this.latitude-this.settings.offsetKeypress),lng:(this.longitude)});
+          this.setPosition({lat:(this.latitude-this.offsetKey),lng:(this.longitude)});
           break;
         case "a":
-          this.setPosition({lat:(this.latitude),lng:(this.longitude-this.settings.offsetKeypress)});
+          this.setPosition({lat:(this.latitude),lng:(this.longitude-this.offsetKey)});
           break;
         case "d":
-          this.setPosition({lat:(this.latitude),lng:(this.longitude+this.settings.offsetKeypress)});
+          this.setPosition({lat:(this.latitude),lng:(this.longitude+this.offsetKey)});
           break;
       }
     })
@@ -241,6 +289,14 @@ export class HomePage {
   get longitude():number{
     return this.currentLocation.lng;
   }
+
+  get offsetKey():number {
+    return (this.settings.offsetRandomize==true)?(this.settings.offsetKeypress+(((0.5)-Math.random())*this.settings.offsetKeypress)):(this.settings.offsetKeypress);
+  }
+
+  get offsetWalk():number {
+    return (this.settings.moveOffsetRandomize==true)?(this.settings.moveOffset+(((0.5)-Math.random())*this.settings.moveOffset)):(this.settings.moveOffset);
+  }
 }
 
 type adbCommandType = "start"|"stop";
@@ -249,3 +305,16 @@ type markerType = "worker"|"location";
 type layers = {
   [types in markerType]: LayerGroup;
 };
+
+interface appSettings {
+  appiumId: string,
+  offsetKeypress: number,
+  offsetRandomize: boolean,
+  adbInterval: number,
+  apiUrl: string
+  defaultLoc: LatLngLiteral,
+  clickMovement: "direct"|"walk",
+  moveInterval: number,
+  moveOffset: number,
+  moveOffsetRandomize: boolean,
+}

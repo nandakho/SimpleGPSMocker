@@ -17,16 +17,27 @@
   <ion-icon name="settings-outline" class="setting-btn" [ngClass]="showSettings?'hidden':'shown'" (click)="toggleSettings()"></ion-icon>
   <ion-card class="settings" [ngClass]="showSettings?'shown':'hidden'">
     <ion-card-content>
-      <ion-label class="settings-section-label">Settings:</ion-label>
+      <ion-label class="settings-section-label">App Setting:</ion-label>
       <ion-input label="Appium ID" [(ngModel)]="tempSettings.appiumId" label-placement="floating"></ion-input>
-      <ion-input label="Offset Per Keypress" [(ngModel)]="tempSettings.offsetKeypress" type="number" label-placement="floating"></ion-input>
       <ion-input label="ADB Interval (ms)" [(ngModel)]="tempSettings.adbInterval" type="number" label-placement="floating"></ion-input>
       <ion-input label="API Url" [(ngModel)]="tempSettings.apiUrl" label-placement="floating"></ion-input>
-      <br>
+      <div class="padding"></div>
+      <ion-label class="settings-section-label">Movement Setting:</ion-label>
+      <ion-input label="Offset for Keypress (WASD)" [(ngModel)]="tempSettings.offsetKeypress" type="number" label-placement="floating"></ion-input>
+      <ion-checkbox label-placement="start" [(ngModel)]="tempSettings.offsetRandomize">Randomize Offset</ion-checkbox>
+      <ion-select [interfaceOptions]="{'cssClass': 'dropdown'}" mode="ios" label="Click Movement Mode" [(ngModel)]="tempSettings.clickMovement" interface="popover" label-placement="floating">
+        <ion-select-option value="direct">Move Directly</ion-select-option>
+        <ion-select-option value="walk">Walk There</ion-select-option>
+      </ion-select>
+      <ion-input *ngIf="tempSettings.clickMovement=='walk'" label="Walk Interval (ms)" [(ngModel)]="tempSettings.moveInterval" type="number" label-placement="floating"></ion-input>
+      <ion-input *ngIf="tempSettings.clickMovement=='walk'" label="Offset for Walk" [(ngModel)]="tempSettings.moveOffset" type="number" label-placement="floating"></ion-input>
+      <ion-checkbox *ngIf="tempSettings.clickMovement=='walk'" label-placement="start" [(ngModel)]="tempSettings.moveOffsetRandomize">Randomize Offset</ion-checkbox>
+      <div class="padding"></div>
       <ion-label class="settings-section-label">Default Location:</ion-label>
       <ion-input label="Latitude" [(ngModel)]="tempSettings.defaultLoc.lat" type="number" label-placement="floating"></ion-input>
       <ion-input label="Longitude" [(ngModel)]="tempSettings.defaultLoc.lng" type="number" label-placement="floating"></ion-input>
       <ion-input label="Altitude" [(ngModel)]="tempSettings.defaultLoc.alt" type="number" label-placement="floating"></ion-input>
+      <div class="padding"></div>
       <div class="buttons">
         <ion-button color="danger" (click)="showSettings=false"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</ion-button>
         <ion-button color="warning" (click)="saveSettings()"><ion-icon name="save-outline"></ion-icon>&nbsp;Save</ion-button>

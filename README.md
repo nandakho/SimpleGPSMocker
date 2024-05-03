@@ -5,23 +5,55 @@
 An app to control Android's GPS coordinate using Developer's Mock GPS from ADB with the help of [Appium](https://github.com/appium/io.appium.settings)
 ## How It Works
 - Frontend displays map with Leaflet's library  
-*Note: Settings can now be changed from frontend directly (upper right menu)*
 - Backend served by default on `localhost` port `8888`
 - Frontend sends command to backend via POST Request to `localhost:8888`
 - Backend then calls ADB Server with command to change coordinate
-## Settings Variable
+## App Setting
+> [!NOTE]
+> Settings can now be changed from frontend directly (upper right menu)
+> Any setting you changed is now saved in your browser,
+> if you use the same browser all previous setting modified will carry over
 ### appiumId:
 Default: `'io.appium.settings'`  
 APPID of Appium. If you build it with custom APPID, change it here
-### offsetKeypress
-Default: `0.00001`  
-How much offset of latitude/longitude a keypress event adds to current coordinate
 ### adbInterval
 Default: `2000`  
 Interval in milisecond. If ADB command is called again before the interval finished, the command will be ignored and recalled after the interval
 ### apiUrl
 Default: `'http://localhost:8888/adb'`  
 Your backend's API URL which connected to ADB Server
+### offsetKeypress
+Default: `0.00001`  
+How much offset of latitude/longitude a keypress event adds to current coordinate
+### offsetRandomize
+Default: `false`  
+If it's set to true, the number in `offsetKeypress` will be randomized between 0.5x ~ 1.5x of it's value
+### defaultLoc
+Default: *It's Monumen Nasional's location*  
+```
+{
+    lat: -6.1753624,
+    lng: 106.8271328,
+    alt: 0
+}
+```  
+Set your default coordinate here, it will be the initial location when the app is starting
+### clickMovement
+Default: `"direct"`  
+Direct movement means immediately set your coordinate to the clicked location,  
+set to `"walk"` to slowly walk towards the clicked location
+### moveInterval
+Default: `100`  
+This is only used if `clickMovement` is set to `"walk"`  
+The interval in ms of how long a "walk" will be triggered again after the last one
+### moveOffset
+Default: `0.00001`  
+This is only used if `clickMovement` is set to `"walk"`  
+The offset of how much one time "walk" is triggered
+### moveOffsetRandomize
+Default: `false`  
+This is only used if `clickMovement` is set to `"walk"`  
+If it's set to true, the number in `moveOffset` will be randomized between 0.5x ~ 1.5x of it's value
 ## Requirements
 ### Android
 - ADB debugging in developer setting is activated, **does not require ROOT**

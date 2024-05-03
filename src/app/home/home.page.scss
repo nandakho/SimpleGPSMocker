@@ -92,10 +92,11 @@ ion-label.import-btn:hover {
 .setting-btn.shown {
   width: 32px;
   height: 32px;
+  z-index: 1;
 }
 .setting-btn.hidden {
-  width: 300px;
-  height: 300px;
+  width: 284px;
+  height: 284px;
   opacity: 0;
 }
 
@@ -111,12 +112,26 @@ ion-label.import-btn:hover {
   top: 0px;
   transition: all .3s ease;
   overflow-y: scroll;
-  ion-input {
+  ion-input, ion-select {
     background: var(--ion-color-dark-tint);
     --padding-start: 6px;
     --padding-end: 6px;
     --highlight-color: var(--ion-color-warning);
     margin-bottom: 4px;
+  }
+  ion-select::part(icon){
+    color: var(--ion-color-light-shade);
+  }
+  ion-checkbox {
+    background: var(--ion-color-dark-tint);
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 6px;
+    font-size: smaller;
+  }
+  ion-checkbox::part(container){
+    border-color: var(--ion-color-medium-shade);
+    background: var(--ion-color-dark-tint);
   }
   ion-card-content {
     padding: 8px;
@@ -134,6 +149,10 @@ ion-label.import-btn:hover {
     ion-button {
       text-transform: none;
     }
+  }
+  div.padding {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 .settings.shown {
