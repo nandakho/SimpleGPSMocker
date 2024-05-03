@@ -11,8 +11,7 @@ An app to control Android's GPS coordinate using Developer's Mock GPS from ADB w
 ## App Setting
 > [!NOTE]
 > Settings can now be changed from frontend directly (upper right menu)  
-> Any setting you changed is now saved in your browser,  
-> if you use the same browser all previous setting modified will carry over
+> Any setting you changed is now saved in your browser, if you use the same browser all previous setting modified will carry over
 ### appiumId:
 Default: `'io.appium.settings'`  
 APPID of Appium. If you build it with custom APPID, change it here
