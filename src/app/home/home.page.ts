@@ -108,6 +108,7 @@ export class HomePage {
 
   jump(){
     this.setPosition({lat:this.tempLatitude,lng:this.tempLongitude});
+    this.resetZoom();
   }
 
   setPosition(pos:LatLngLiteral){
