@@ -12,7 +12,6 @@ ion-header {
 }
 
 ion-card.coord-info {
-  cursor: pointer;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -33,21 +32,20 @@ ion-card.coord-info {
     color: var(--ion-color-light-shade);
     font-weight: bold;
     font-size: small;
+    ion-input {
+      min-height: 22px !important;
+    }
+    ion-input:hover {
+      color: var(--ion-color-warning);
+    }
     ion-label {
       font-size: smaller;
     }
-  }
-}
-
-ion-card.coord-info:hover {
-  border: 2px solid var(--ion-color-warning);
-  ion-card-header {
-    ion-card-title {
-      color: var(--ion-color-warning);
+    div.buttons{
+      ion-button {
+        text-transform: none;
+      }
     }
-  }
-  ion-card-content {
-    color: var(--ion-color-warning);
   }
 }
 
@@ -160,6 +158,119 @@ ion-label.import-btn:hover {
   height: 300px;
 }
 .settings.hidden {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}
+
+.adb-btn {
+  margin: 10px;
+  padding: 6px;
+  color: var(--ion-color-light-shade);
+  font-size: xx-large;
+  background: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+.adb-btn:hover {
+  border: 2px solid var(--ion-color-warning) !important;
+  color: var(--ion-color-warning) !important;
+}
+.adb-btn.shown {
+  width: 32px;
+  height: 32px;
+  z-index: 1;
+}
+.adb-btn.hidden {
+  width: 284px;
+  height: 284px;
+  opacity: 0;
+}
+.adb-btn.red {
+  border: 2px solid var(--ion-color-danger);
+  color: var(--ion-color-danger);
+}
+.adb-btn.green {
+  border: 2px solid var(--ion-color-success);
+  color: var(--ion-color-success);
+}
+
+.adb-settings {
+  margin: 10px;
+  padding: 8px;
+  color: var(--ion-color-light-shade);
+  background: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-light-shade);
+  border-radius: 10px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  transition: all .3s ease;
+  overflow-y: scroll;
+  ion-input, ion-select {
+    background: var(--ion-color-dark-tint);
+    --padding-start: 6px;
+    --padding-end: 6px;
+    --highlight-color: var(--ion-color-warning);
+    margin-bottom: 4px;
+  }
+  ion-select::part(icon){
+    color: var(--ion-color-light-shade);
+  }
+  ion-checkbox {
+    background: var(--ion-color-dark-tint);
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 6px;
+    font-size: smaller;
+  }
+  ion-checkbox::part(container){
+    border-color: var(--ion-color-medium-shade);
+    background: var(--ion-color-dark-tint);
+  }
+
+  div.unavailable-list {
+    background: var(--ion-color-dark-tint);
+    text-align: center;
+    ion-label.listed {
+      width: 100%;
+      padding: 0px;
+      font-size: smaller;
+    }
+  }
+
+  ion-card-content {
+    padding: 8px;
+    padding-top: 4px;
+  }
+  .settings-section-label {
+    font-weight: bold;
+    font-size: medium;
+    color: var(--ion-color-warning);
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ion-button {
+      text-transform: none;
+    }
+  }
+  div.padding {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+.adb-settings.shown {
+  width: 300px;
+  height: 300px;
+}
+.adb-settings.hidden {
   width: 0px;
   height: 0px;
   opacity: 0;

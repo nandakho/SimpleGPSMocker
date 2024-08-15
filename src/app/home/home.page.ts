@@ -15,6 +15,8 @@ export class HomePage {
     lng: 0,
     alt: 0
   };
+  tempLatitude: number = 0;
+  tempLongitude: number = 0;
   private isWalking: boolean = false;
   private walkToLoc: LatLngLiteral = {
     lat: 0,
@@ -39,6 +41,8 @@ export class HomePage {
   };
   public tempSettings:appSettings = JSON.parse(JSON.stringify(this.settings));
   public showSettings: boolean = false;
+  public showAdbs: boolean = false;
+  public devices: adbDevices[] = [];
   public leafletOptions = {
     zoom: 17,
     maxZoom: 25,
@@ -77,8 +81,33 @@ export class HomePage {
     this.showSettings = false;
   }
 
+  async getDevices(){
+    const devices = await this.postAPI('device_list');
+    if(devices.status==200 && devices.data.message=="OK"){
+      if(devices.data.data.length>0){
+        this.devices = devices.data.data.map((x:any)=>{return{serial:x.serial,status:x.status,selected:false}});
+        let d = this.devices.find(x=>x.status=="device");
+        if(d){ d.selected = true };
+        return;
+      }
+    }
+    this.devices = [];
+    return;
+  }
+
+  toggleADBSettings(){
+    this.showAdbs = true;
+  }
+  closeADBSettings(){
+    this.showAdbs = false;
+  }
+
   defLoc():LatLngLiteral{
     return this.settings.defaultLoc;
+  }
+
+  jump(){
+    this.setPosition({lat:this.tempLatitude,lng:this.tempLongitude});
   }
 
   setPosition(pos:LatLngLiteral){
@@ -124,6 +153,8 @@ export class HomePage {
   }
 
   resetZoom(){
+    this.tempLatitude = this.curLoc.lat;
+    this.tempLongitude = this.curLoc.lng;
     this.map.setView(this.curLoc, this.leafletOptions.zoom);
   }
 
@@ -199,13 +230,14 @@ export class HomePage {
     input.click();
   }
 
-  async postAPI(suffix:string,data:{[what:string]:string}){
+  async postAPI(suffix:string,data?:{[what:string]:string}){
     const httpReply = await CapacitorHttp.post({
       url:`${this.settings.apiUrl}/${suffix}`,
-      data: data,
+      data,
       headers:{'content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
     });
     console.log(httpReply);
+    return httpReply;
   }
 
   callAdb(opt:adbOptions){
@@ -220,7 +252,11 @@ export class HomePage {
         alt: this.settings.defaultLoc.alt,
         status: opt.types,
       };
-      this.postAPI('mock_gps',{mock_options:JSON.stringify(mockOpts)});
+      if(this.selectedDevices.length>0){
+        this.postAPI('mock_gps',{mock_options:JSON.stringify(mockOpts),targets:this.selectedDevices.join(",")});
+      } else {
+        console.log(`No device selected!`);
+      }
       setTimeout(() => {
         this.coolDown = false;
         if(latOld!=this.latitude || lngOld!=this.longitude){
@@ -238,6 +274,7 @@ export class HomePage {
       this.map.addLayer(this.layerGroups[layers as markerType]);
     }
     setTimeout(() => lMap.invalidateSize(true), 500);
+    await this.getDevices();
     this.setPosition({lat:this.latitude,lng:this.longitude});
     this.resetZoom();
     //Listener
@@ -275,6 +312,7 @@ export class HomePage {
   }
 
   set latitude(lat:number){
+    this.tempLatitude = lat;
     this.currentLocation.lat = lat;
     this.ref.detectChanges();
   }
@@ -283,6 +321,7 @@ export class HomePage {
   }
 
   set longitude(lng:number){
+    this.tempLongitude = lng;
     this.currentLocation.lng = lng;
     this.ref.detectChanges();
   }
@@ -296,6 +335,18 @@ export class HomePage {
 
   get offsetWalk():number {
     return (this.settings.moveOffsetRandomize==true)?(this.settings.moveOffset+(((0.5)-Math.random())*this.settings.moveOffset)):(this.settings.moveOffset);
+  }
+
+  get selectedDevices():string[]{
+    return [...this.devices.filter(x=>x.selected).map(y=>y.serial)];
+  }
+
+  get availableDevices():adbDevices[]{
+    return [...this.devices.filter(x=>x.status=='device')];
+  }
+
+  get unavailableDevices():adbDevices[]{
+    return [...this.devices.filter(x=>x.status!='device')];
   }
 }
 
@@ -317,4 +368,10 @@ interface appSettings {
   moveInterval: number,
   moveOffset: number,
   moveOffsetRandomize: boolean,
+}
+
+interface adbDevices {
+  serial: string,
+  status: string,
+  selected: boolean,
 }

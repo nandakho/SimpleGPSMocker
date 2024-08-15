@@ -64,7 +64,7 @@ If it's set to true, the number in `moveOffset` will be randomized between 0.5x 
 - Web Browser (Developed and tested with Chrome v123)
 - Make sure your android device is shown with `adb devices` command
 ## Run
-- Install all requirements with `npm i` in project root directory: `./` and in backend backend: `./backend`
+- Install all requirements with `npm i` in project root directory: `./` and in backend directory: `./backend`
 - Make sure you are in project root directory `./` then run `npm run all` to start both Frontend & Backend  
 *Note: This command is made for Windows OS. If you use any other OS, change it to suit your needs*
 ## Controlls

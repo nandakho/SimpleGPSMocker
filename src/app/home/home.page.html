@@ -3,14 +3,17 @@
     [leafletOptions]="leafletOptions"
     (leafletMapReady)="onMapReady($event)">
   </div>
-  <ion-card (click)="resetZoom()" class="coord-info">
+  <ion-card class="coord-info">
     <ion-card-header>
-      <ion-card-title>Position:</ion-card-title>  
+      <ion-card-title>Position (Editable)</ion-card-title>  
     </ion-card-header>
     <ion-card-content>
-      Latitude: {{latitude}}<br>
-      Longitude: {{longitude}}<br>
-      <ion-label>*Click here to reset view</ion-label>
+      <ion-input type="number" [(ngModel)]="tempLatitude" label="Latitude"></ion-input>
+      <ion-input type="number" [(ngModel)]="tempLongitude" label="longitude"></ion-input>
+      <div class="buttons">
+        <ion-button color="warning" (click)="resetZoom()"><ion-icon name="close-outline"></ion-icon>&nbsp;Reset View</ion-button>
+        <ion-button color="success" (click)="jump()"><ion-icon name="airplane-outline"></ion-icon>&nbsp;Jump</ion-button>
+      </div>
     </ion-card-content>
   </ion-card>
   <ion-label (click)="loadLocations()" class="import-btn"><ion-icon name="folder-open"></ion-icon>Import Locations</ion-label>
@@ -41,6 +44,32 @@
       <div class="buttons">
         <ion-button color="danger" (click)="showSettings=false"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</ion-button>
         <ion-button color="warning" (click)="saveSettings()"><ion-icon name="save-outline"></ion-icon>&nbsp;Save</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-icon name="logo-android" class="adb-btn" [ngClass]="[showAdbs?'hidden':'shown',selectedDevices.length>0?'green':'red']" (click)="toggleADBSettings()"></ion-icon>
+  <ion-card class="adb-settings" [ngClass]="showAdbs?'shown':'hidden'">
+    <ion-card-content>
+      <div *ngIf="devices.length==0">
+        <ion-label class="settings-section-label">No Device Detected</ion-label>
+      </div>
+      <div *ngIf="availableDevices.length>0">
+        <ion-label class="settings-section-label">Available Devices:</ion-label>
+        <div>
+          <ion-checkbox *ngFor="let dev of availableDevices" [(ngModel)]="dev.selected" label-placement="start">{{dev.serial}}</ion-checkbox>
+        </div>
+        <div class="padding"></div>
+      </div>
+      <div *ngIf="unavailableDevices.length>0">
+        <ion-label class="settings-section-label">Unavailable Devices:</ion-label>
+        <div class="unavailable-list">
+          <ion-label class="listed" *ngFor="let dev of unavailableDevices">{{dev.serial}} &nbsp; &nbsp; &nbsp; {{dev.status}}</ion-label>
+        </div>
+        <div class="padding"></div>
+      </div>
+      <div class="buttons">
+        <ion-button color="danger" (click)="closeADBSettings()"><ion-icon name="close-outline"></ion-icon>&nbsp;Close</ion-button>
+        <ion-button color="warning" (click)="getDevices()"><ion-icon name="refresh-outline"></ion-icon>&nbsp;Refresh</ion-button>
       </div>
     </ion-card-content>
   </ion-card>
