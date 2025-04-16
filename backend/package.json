@@ -1,8 +1,8 @@
 {
     "name": "backend",
     "version": "0.0.1",
-    "author": "ananda",
-    "homepage": "http://git.esswf.me:3000//",
+    "author": "nandakho",
+    "homepage": "https://github.com/nandakho/SimpleGPSMocker",
     "scripts": {
         "start": "nodemon app.js"
     },
